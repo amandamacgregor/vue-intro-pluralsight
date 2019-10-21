@@ -61,6 +61,21 @@
                   v-model="selectedHero.description"
                 />
               </div>
+              <div class="field">
+                <label class="label" for="capeCounter">cape counter</label>
+                <input
+                  class="input"
+                  type="number"
+                  id="capeCounter"
+                  v-model="selectedHero.capeCounter"
+                />
+              </div>
+              <div class="field">
+                <label class="label" for="capeMessage">cape message</label>
+                <label class="input" name="capeMessage">{{
+                  capeMessage
+                }}</label>
+              </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -88,24 +103,28 @@ const ourHeroes = [
     id: 10,
     firstName: 'Ella',
     lastName: 'Papa',
+    capeCounter: 1,
     description: 'fashionista',
   },
   {
     id: 20,
     firstName: 'Madelyn',
     lastName: 'Papa',
+    capeCounter: 3,
     description: 'the cat whisperer',
   },
   {
     id: 30,
     firstName: 'Haley',
     lastName: 'Papa',
+    capeCounter: 2,
     description: 'pen wielder',
   },
   {
     id: 40,
     firstName: 'Landon',
     lastName: 'Papa',
+    capeCounter: 0,
     description: 'arc trooper',
   },
 ];
@@ -116,6 +135,7 @@ export default {
       heroes: [],
       selectedHero: undefined,
       message: '',
+      capeMessage: '',
     };
   },
   computed: {
@@ -148,7 +168,7 @@ export default {
           this.capeMessage = 'One is all I need';
           break;
         case 2:
-          this.capeMessage = 'Alway have a spare';
+          this.capeMessage = 'Always have a spare';
           break;
         default:
           this.capeMessage = 'You can never have enough capes';
@@ -165,6 +185,15 @@ export default {
     },
     selectHero(hero) {
       this.selectedHero = hero;
+    },
+  },
+  watch: {
+    'selectedHero.capeCounter': {
+      immediate: true,
+      handler(newValue, oldValue) {
+        console.log(`Watcher evaluated. old=${oldValue}, new=${newValue}`);
+        this.handleTheCapes(newValue);
+      },
     },
   },
 };
