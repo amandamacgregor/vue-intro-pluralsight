@@ -31,7 +31,12 @@
           <!-- <heroes-list> -->
 
           <!-- <hero-detail> -->
-          <HeroDetail v-if="selectedHero" :hero="selectedHero" />
+          <HeroDetail 
+            v-if="selectedHero" 
+            :hero="selectedHero"
+            @cancel="cancelHero"
+            @save="saveHero"
+             />
           <!-- </hero-detail> -->
 
           <div class="notification is-info" v-show="message">{{ message }}</div>
@@ -42,8 +47,7 @@
 </template>
 
 <script>
-import { ourHeroes } from '../shared';
-
+import { ourHeroes, lifecycleHooks, heroWatchers, logger } from '../shared';
 import HeroDetail from '@/components/hero-detail';
 
 export default {
@@ -57,8 +61,10 @@ export default {
     };
   },
   components: { HeroDetail },
+  mixins: [lifecycleHooks, heroWatchers],
   created() {
     this.loadHeroes();
+    logger.info(`${this.componentName} created hook called`);
   },
   methods: {
     async getHeroes() {
@@ -75,9 +81,9 @@ export default {
     cancelHero() {
       this.selectedHero = undefined;
     },
-    saveHero() {
-      const index = this.heroes.findIndex(h => h.id === this.selectedHero.id);
-      this.heroes.splice(index, 1, this.selectedHero);
+    saveHero(hero) {
+      const index = this.heroes.findIndex(h => h.id === hero.id);
+      this.heroes.splice(index, 1, hero);
       this.heroes = [...this.heroes];
       this.selectedHero = undefined;
     },
